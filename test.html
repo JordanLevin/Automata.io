@@ -1,15 +1,26 @@
 <!doctype html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
     </head>
 
     <body>
-        <canvas id="screen" width="1280" height="720"></canvas>
+        <div id="menubar">
+            <div class="ui buttons">
+              <button class="ui button" id="st_create">CREATE</button>
+              <button class="ui button" id="st_move">MOVE</button>
+              <button class="ui button" id="st_delete">DELETE</button>
+            </div>
+        </div>
+        <div>
+        <canvas id="screen" width="1280" height="720" style="border: 1px solid black;"></canvas>
+        </div>
 
         <script
 			  src="https://code.jquery.com/jquery-3.3.1.min.js"
 			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 			  crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
         <script src="canvas.js"></script>
     </body>
 
