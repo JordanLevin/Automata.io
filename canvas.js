@@ -1,11 +1,26 @@
+class Midpoint {
+    constructor(x, y){
+        this.x = x;
+        this.y = y;
+    }
+    render(ctx){
+        //fill(0,0,0);
+        //circle(this.x,this.y,10);
+    }
+}
 class Transition {
-    constructor(x1, y1, x2, y2) {
+    constructor(x1, y1, x2, y2, dst, chars) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.dst = dst;
+        this.chars = chars;
+        this.mid = new Midpoint((x1+x2)/2, (y1+y2)/2);
     }
     render(ctx) {
+        this.mid.render();
+
         ctx.beginPath();
         ctx.moveTo(this.x1, this.y1);
         ctx.lineTo(this.x2, this.y2);
@@ -61,6 +76,9 @@ class Node {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
         ctx.stroke();
+        ctx.font = "16px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(this.name, this.x, this.y);
     }
 }
 
@@ -70,9 +88,11 @@ class Automata {
         this.ctx = this.canvas.getContext('2d');
         this.nodes = new Array();
 
-        this.mode = 'st_create';
+        this.mode = 'default';
         this.move_node = false;
         this.selected = -1;
+
+        this.state = 0;
 
         this.curr_t = null;
     }
@@ -103,7 +123,8 @@ class Automata {
 
                 // Creates a new node
                 if (this.mode == 'st_create') {
-                    this.nodes.push(new Node(mouse.x, mouse.y, 50, 'test'));
+                    this.nodes.push(new Node(mouse.x, mouse.y, 50, 's'+this.state));
+                    this.state++;
                 }
                 // Find node index and delete if a node was found
                 else if (this.mode == 'st_delete') {
@@ -122,7 +143,9 @@ class Automata {
                             this.curr_t.x1,
                             this.curr_t.y1,
                             this.curr_t.x2,
-                            this.curr_t.y2
+                            this.curr_t.y2,
+                            dest_node,
+                            [],
                         ));
                         this.curr_t = null;
                         this.selected = -1;
@@ -167,6 +190,8 @@ class Automata {
 
         // draw current transition
         if (this.curr_t) this.curr_t.render(this.ctx);
+
+        //this.ctx.drawImage(this.input._renderCanvas, this.input._x, this.input._y);
     }
 }
 $(document).ready(function() {
