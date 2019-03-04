@@ -1,0 +1,19 @@
+    // TODO menu functionality later
+    // right_clicked(x, y){
+    // let node = this.find_node(x, y);
+    // if(node == -1)
+    // return false;
+    // let menu = createElement('div');
+    // menu.id('menu');
+    // menu.position(x, y);
+    // let item1 = createElement('input');
+    // item1.attribute('type', 'checkbox');
+    // item1.html('Initial');
+    // item1.parent('menu');
+    // let item2 = createElement('input');
+    // item2.attribute('type', 'checkbox');
+    // item2.html('Final');
+    // item2.parent('menu');
+    // return false;
+    //}
+

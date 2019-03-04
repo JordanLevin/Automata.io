@@ -1,4 +1,5 @@
-let state = {textbox: null, tr:null};
+let state = {textbox: null, tr: null};
+let currstring = 'abb';  // TEMPORARY TEST
 
 const MIDPT_SIZE = 10;
 
@@ -69,10 +70,10 @@ class Transition {
         line(this.x2, this.y2, pt2.x, pt2.y);
 
         // DRAW TRANSITION CHARACTERS
-        fill(0,0,0);
+        fill(0, 0, 0);
         textAlign(CENTER);
         textSize(16);
-        text(this.chars, this.mid.x, this.mid.y - MIDPT_SIZE*1.5);
+        text(this.chars, this.mid.x, this.mid.y - MIDPT_SIZE * 1.5);
     }
 }
 
@@ -82,6 +83,7 @@ class Node {
         this.y = y;
         this.r = r;
         this.name = name;
+        this.col = 'white';
 
         this.init = false;
         this.end = false;
@@ -91,16 +93,21 @@ class Node {
     }
 
     render() {
+        fill(this.col);
+        circle(this.x, this.y, this.r);
+        textAlign(CENTER);
+        textSize(16);
+        text(this.name, this.x, this.y);
+
         noFill();
         if (this.end) {
             circle(this.x, this.y, this.r / 2);
         }
-
-        circle(this.x, this.y, this.r);
-        fill(0,0,0);
-        textAlign(CENTER);
-        textSize(16);
-        text(this.name, this.x, this.y);
+        if (this.init) {
+            triangle(
+                this.x - this.r, this.y, this.x - this.r - 10, this.y - 10,
+                this.x - this.r - 10, this.y + 10);
+        }
     }
 }
 
@@ -150,6 +157,7 @@ class Automata {
             state.textbox.remove();
             state.textbox = null;
             state.tr = null;
+            return;
         }
         // Check if point clicked in canvas
         let c = document.getElementById('defaultCanvas0');
@@ -157,6 +165,7 @@ class Automata {
         if (y < crds.top || y > crds.bottom || x < crds.left || x > crds.right)
             return;
 
+        console.log(this.mode);
         // Creates a new node
         if (this.mode == 'st_create') {
             this.nodes.push(new Node(x, y, 40, 's' + this.state));
@@ -207,35 +216,24 @@ class Automata {
             state.textbox.attribute('z-index', 1);
             state.textbox.position(tr.mid.x, tr.mid.y);
             document.getElementById('textbox').focus();
-            this.mode = 'default';
+            // this.mode = 'default';
         } else if (this.mode == 'init') {
             let index = this.find_node(x, y);
             this.nodes[index].init = !this.nodes[index].init;
-
         } else if (this.mode == 'final') {
             let index = this.find_node(x, y);
             this.nodes[index].end = !this.nodes[index].end;
+        } else if (this.mode == 'play') {
+            console.log('HELLO???');
+            for (let node of this.nodes) {
+                console.log(node);
+                if (node.init) {
+                    this.run(currstring, node);
+                }
+                return;
+            }
         }
     }
-
-    // TODO menu functionality later
-    // right_clicked(x, y){
-    // let node = this.find_node(x, y);
-    // if(node == -1)
-    // return false;
-    // let menu = createElement('div');
-    // menu.id('menu');
-    // menu.position(x, y);
-    // let item1 = createElement('input');
-    // item1.attribute('type', 'checkbox');
-    // item1.html('Initial');
-    // item1.parent('menu');
-    // let item2 = createElement('input');
-    // item2.attribute('type', 'checkbox');
-    // item2.html('Final');
-    // item2.parent('menu');
-    // return false;
-    //}
 
     mouse_moved(x, y) {
         if (this.mode == 'st_move') {
@@ -256,6 +254,25 @@ class Automata {
             if (this.curr_t) {
                 this.curr_t.x2 = x;
                 this.curr_t.y2 = y;
+            }
+        }
+    }
+
+    // Run a DFA, just a temporary function for testing
+    run(str, srcnode) {
+        console.log('RUNNING');
+        if (str == '' && srcnode.end) {
+            srcnode.col = 'green';
+            return;
+        }
+        else if(str == ''){
+            srcnode.col = 'red';
+            return;
+        }
+        for (let tr of srcnode.transitions) {
+            if (tr.chars.includes(str[0])) {
+                tr.dst.col = 'yellow';
+                this.run(str.substr(1), tr.dst);
             }
         }
     }
@@ -310,6 +327,9 @@ function setup() {
     });
     $('#final').click(function() {
         a.mode = 'final';
+    });
+    $('#play').click(function() {
+        a.mode = 'play';
     });
     document.getElementById('defaultCanvas0')
         .addEventListener('contextmenu', event => event.preventDefault());
