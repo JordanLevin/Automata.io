@@ -6,24 +6,32 @@
     </head>
 
     <body>
-        <div id="menubar">
+        <div class="ui grid">
+            <div class="eight wide column">
             <div class="ui buttons">
-              <!--<button class="ui button" id="st_create">CREATE</button>-->
-              <!--<button class="ui button" id="st_move">MOVE</button>-->
-              <!--<button class="ui button" id="st_delete">DELETE</button>-->
-              <!--<button class="ui button" id="tr_create">TRANSITION</button>-->
-              <!--<button class="ui button" id="edit">EDIT</button>-->
-              <!--<button class="ui button" id="init">INIT</button>-->
-              <!--<button class="ui button" id="final">FINAL</button>-->
-
               <button class="ui icon button" id="st_create"><i class="circle outline icon"></i></button>
               <button class="ui icon button" id="st_move"><i class="mouse pointer icon"></i></button>
               <button class="ui icon button" id="st_delete"><i class="close icon"></i></button>
               <button class="ui icon button" id="tr_create"><i class="arrow right icon"></i></button>
               <button class="ui icon button" id="edit"><i class="edit icon"></i></button>
               <button class="ui icon button" id="play"><i class="play icon"></i></button>
+              <button class="ui icon button" id="step">STEP</button>
               <button class="ui icon button" id="init">INIT</button>
               <button class="ui icon button" id="final">FINAL</button>
+            </div>
+            <div class="ui input">
+              <input type="text" id="inputstr" placeholder="Input string">
+            </div>
+            </div>
+
+            <div class="eight wide column">
+
+            <div class="ui right floated fluid action input">
+              <input type="text" id="saveloadstr" placeholder="JSON automata">
+              <div class="ui button" id="save">SAVE</div>
+              <div class="ui button" id="load">LOAD</div>
+            </div>
+
             </div>
         </div>
 
@@ -34,7 +42,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
         <script type="text/javascript" src="p5/p5.min.js"></script>
         <script type="text/javascript" src="p5/addons/p5.dom.min.js"></script>
-        <script type="text/javascript" src="canvas.js"></script>
+
+        <!--JS FILE DEPENDENCIES-->
+        <script type="text/javascript" src="globals.js"></script>
+        <script type="text/javascript" src="state.js"></script>
+        <script type="text/javascript" src="input.js"></script>
+        <script type="text/javascript" src="main.js"></script>
 
     </body>
 
