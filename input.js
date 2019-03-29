@@ -45,7 +45,7 @@ function edit(x, y) {
     state.textbox.id('textbox');
     state.textbox.attribute('type', 'text');
     state.textbox.attribute('z-index', 1);
-    state.textbox.position(tr.mid.x, tr.mid.y);
+    state.textbox.position(view_to_canvasX(tr.mid.x), view_to_canvasY(tr.mid.y) + canvas_offset());
     //For some reasson the internet says this hack makes focus work
     window.setTimeout(function ()
     { document.getElementById('textbox').focus(); }, 0);
@@ -60,19 +60,15 @@ function st_final(x, y) {
 }
 
 function automata_play(){
-    g_accepted = null;
-    g_rejected = null;
-    g_currstring = document.getElementById('inputstr').value;
-    //Pick up where step left off
-    if(g_runningstring) g_currstring = g_runningstring;
-    for (let node of a.nodes) {
-        console.log(node);
-        if (node.init) {
-            node.col = 'blue';
-            run(g_currstring, node);
-        }
-        return;
+    while (g_rejected == null && g_accepted == null) {
+        automata_step();
     }
+    g_rejected = null;
+    g_accepted = null;
+    g_currnode = null;
+    g_prevnode = null;
+    g_currstring = null;
+    g_runningstring = null;
 }
 function automata_step(){
     g_currstring = document.getElementById('inputstr').value;
@@ -93,6 +89,7 @@ function automata_step(){
 
 
 function left_clicked(x, y) {
+    //console.log('trans x: ' + x, 'y: ' + y);
     if (state.textbox) {
         state.tr.chars.push(state.textbox.value());
         state.textbox.remove();
@@ -101,10 +98,11 @@ function left_clicked(x, y) {
         return;
     }
     // Check if point clicked in canvas
-    let c = document.getElementById('defaultCanvas0');
-    let crds = c.getBoundingClientRect();
-    if (y < crds.top || y > crds.bottom || x < crds.left || x > crds.right)
-        return;
+    // This code caused issues and seems unnecessary
+    //let c = document.getElementById('defaultCanvas0');
+    //let crds = c.getBoundingClientRect();
+    //if (y < crds.top || y > crds.bottom || x < crds.left || x > crds.right)
+        //return;
 
     console.log(a.mode);
     if (a.mode == 'st_create')
@@ -144,4 +142,14 @@ function mouse_moved(x, y) {
             a.curr_t.y2 = y;
         }
     }
+}
+
+function mouse_dragged(x, y){
+    if(!g_drag){
+        g_translate.x1 = x - g_translate.x;
+        g_translate.y1 = y - g_translate.y;
+    }
+    g_drag = true;
+    g_translate.x = x - g_translate.x1;
+    g_translate.y = y - g_translate.y1;
 }

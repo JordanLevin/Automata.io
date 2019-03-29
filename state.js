@@ -119,6 +119,12 @@ class Automata {
     }
 
     render() {
+        //Perform translations and scaling
+        resetMatrix();
+        translate(WIDTH/2, HEIGHT/2);
+        scale(g_scale);
+        translate(-WIDTH/2, -HEIGHT/2);
+        translate(g_translate.x, g_translate.y);
         background(255, 255, 255);
         for (let node of this.nodes) {
             node.render(this.canvas);
